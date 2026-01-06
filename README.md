@@ -274,7 +274,7 @@ BankaciPlus/
 │   ├── train_credit_risk_pro.py   # Credit Risk Pro Model eğitim scripti
 │   ├── train_churn_model.py       # Churn Prediction Model eğitim scripti
 │   └── train_nba_kmeans.py        # NBA K-Means Clustering Model eğitim scripti
-├── compare_churn_models_100cv.py   # Model karşılaştırma scripti
+├── compare_churn_models.py        # Model karşılaştırma scripti
 └── model_comparison_log.txt        # Model karşılaştırma logu
 ```
 
@@ -562,7 +562,7 @@ BankaciPlus/
 │   ├── train_credit_risk_pro.py   # Credit Risk Pro Model training script
 │   ├── train_churn_model.py       # Churn Prediction Model training script
 │   └── train_nba_kmeans.py        # NBA K-Means Clustering Model training script
-├── compare_churn_models_100cv.py   # Model comparison script
+├── compare_churn_models.py        # Model comparison script
 └── model_comparison_log.txt        # Model comparison log
 ```
 
