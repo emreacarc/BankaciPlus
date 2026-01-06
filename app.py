@@ -287,12 +287,13 @@ def set_design():
             border: 1px solid var(--glass-border) !important;
         }
 
-        /* Expander klavye kısayolu metinlerini ve tooltip'leri gizle - Agresif yaklaşım */
+        /* Expander klavye kısayolu metinlerini ve tooltip'leri gizle - Çok agresif yaklaşım */
         /* Tüm title attribute'lu elementleri gizle */
         [data-testid="stExpander"] [title],
         [data-testid="stExpander"] *[title],
         .streamlit-expanderHeader [title],
-        .streamlit-expanderHeader *[title] {
+        .streamlit-expanderHeader *[title],
+        .streamlit-expanderHeader button[title] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -302,9 +303,18 @@ def set_design():
             margin: 0 !important;
             font-size: 0 !important;
             line-height: 0 !important;
+            overflow: hidden !important;
         }
         
-        /* Expander header içindeki tüm p, span, div elementlerini kontrol et ve gereksiz olanları gizle */
+        /* Expander header button'un title attribute'unu kaldır */
+        .streamlit-expanderHeader button {
+            position: relative;
+        }
+        .streamlit-expanderHeader button[title] {
+            title: none !important;
+        }
+        
+        /* Expander header içindeki tüm p, span, div elementlerini kontrol et */
         .streamlit-expanderHeader p:not(:first-of-type),
         .streamlit-expanderHeader span:not(:first-of-type),
         .streamlit-expanderHeader div:not(:first-of-type) {
@@ -328,24 +338,13 @@ def set_design():
             display: none !important;
         }
         
-        /* Expander header içindeki text node'ları gizlemek için */
-        .streamlit-expanderHeader::after,
-        .streamlit-expanderHeader::before {
-            display: none !important;
-        }
-        
-        /* Expander header button'un kendisindeki title'ı kaldır */
-        .streamlit-expanderHeader button {
-            position: relative;
-        }
-        
-        /* Expander header içindeki tüm tooltip container'larını gizle */
+        /* Expander header içindeki tooltip container'larını gizle */
         [data-testid="stExpander"] [class*="tooltip"],
         [data-testid="stExpander"] [class*="hint"],
         [data-testid="stExpander"] [class*="keyboard"] {
             display: none !important;
         }
-
+        
         /* Tablo ve DataFrame Şeffaf Arka Plan ve Beyaz Metin Fix */
         [data-testid="stDataFrame"], 
         [data-testid="stDataFrame"] *, 
@@ -459,6 +458,50 @@ def set_design():
         <div style="position: absolute; border-radius: 50%; filter: blur(80px); width: 500px; height: 500px; background: radial-gradient(circle, rgba(255, 0, 212, 0.15) 0%, transparent 70%); bottom: -150px; right: -150px;"></div>
     </div>
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 80px 80px; pointer-events: none; z-index: -1;"></div>
+    """, unsafe_allow_html=True)
+    
+    # JavaScript ile expander title attribute'larını kaldır
+    st.markdown("""
+    <script>
+    function removeExpanderHints() {
+        // Tüm expander'ları bul
+        const expanders = document.querySelectorAll('[data-testid="stExpander"]');
+        expanders.forEach(function(expander) {
+            // Expander header içindeki tüm title attribute'ları kaldır
+            const titleElements = expander.querySelectorAll('[title]');
+            titleElements.forEach(function(el) {
+                el.removeAttribute('title');
+            });
+            
+            // Expander header button'un title'ını kaldır
+            const headerButton = expander.querySelector('.streamlit-expanderHeader button');
+            if (headerButton) {
+                headerButton.removeAttribute('title');
+            }
+        });
+    }
+    
+    // Sayfa yüklendiğinde çalıştır
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', removeExpanderHints);
+    } else {
+        removeExpanderHints();
+    }
+    
+    // Streamlit'in rerun'larında da çalışması için
+    setTimeout(removeExpanderHints, 100);
+    setTimeout(removeExpanderHints, 500);
+    setTimeout(removeExpanderHints, 1000);
+    
+    // MutationObserver ile dinamik değişiklikleri yakala
+    const observer = new MutationObserver(function(mutations) {
+        removeExpanderHints();
+    });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    </script>
     """, unsafe_allow_html=True)
 
 
