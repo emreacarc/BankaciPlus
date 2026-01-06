@@ -310,10 +310,6 @@ def set_design():
         .streamlit-expanderHeader button {
             position: relative;
         }
-        .streamlit-expanderHeader button[title] {
-            title: none !important;
-        }
-        
         /* Expander header içindeki tüm p, span, div elementlerini kontrol et */
         .streamlit-expanderHeader p:not(:first-of-type),
         .streamlit-expanderHeader span:not(:first-of-type),
@@ -343,6 +339,22 @@ def set_design():
         [data-testid="stExpander"] [class*="hint"],
         [data-testid="stExpander"] [class*="keyboard"] {
             display: none !important;
+        }
+        
+        /* Expander header içindeki tüm text içeren küçük elementleri gizle */
+        .streamlit-expanderHeader small,
+        .streamlit-expanderHeader .small,
+        .streamlit-expanderHeader [class*="small"],
+        .streamlit-expanderHeader [style*="font-size: 0"],
+        .streamlit-expanderHeader [style*="opacity: 0"] {
+            display: none !important;
+        }
+        
+        /* Expander header button içindeki tüm text node'ları gizle */
+        .streamlit-expanderHeader button::after,
+        .streamlit-expanderHeader button::before {
+            display: none !important;
+            content: "" !important;
         }
         
         /* Tablo ve DataFrame Şeffaf Arka Plan ve Beyaz Metin Fix */
