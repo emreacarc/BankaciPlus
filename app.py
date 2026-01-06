@@ -293,7 +293,9 @@ def set_design():
         [data-testid="stExpander"] *[title],
         .streamlit-expanderHeader [title],
         .streamlit-expanderHeader *[title],
-        .streamlit-expanderHeader button[title] {
+        .streamlit-expanderHeader button[title],
+        [data-testid="stExpander"] summary [title],
+        [data-testid="stExpander"] summary *[title] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -306,15 +308,44 @@ def set_design():
             overflow: hidden !important;
         }
         
-        /* Expander header button'un title attribute'unu kaldır */
-        .streamlit-expanderHeader button {
+        /* Expander summary içindeki tüm text node'ları kontrol et ve klavye kısayolu metinlerini gizle */
+        [data-testid="stExpander"] summary * {
             position: relative;
         }
+        
+        /* Expander summary içindeki belirli metin içeren elementleri gizle */
+        [data-testid="stExpander"] summary *:not([data-testid="stMarkdownContainer"]):not([data-testid="stIconMaterial"]) {
+            /* Bu kural sadece markdown container ve icon dışındaki elementleri etkiler */
+        }
+        
+        /* Expander header button'un title attribute'unu kaldır */
+        .streamlit-expanderHeader button,
+        [data-testid="stExpander"] summary {
+            position: relative;
+        }
+        
+        /* Expander summary içindeki aria-label içeren elementleri gizle */
+        [data-testid="stExpander"] summary [aria-label*="Press"],
+        [data-testid="stExpander"] summary [aria-label*="Enter"],
+        [data-testid="stExpander"] summary [aria-label*="keyboard"],
+        [data-testid="stExpander"] summary [aria-label*="↓"],
+        [data-testid="stExpander"] summary [aria-label*="↑"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            font-size: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+        
         /* Expander header içindeki tüm p, span, div elementlerini kontrol et */
         .streamlit-expanderHeader p:not(:first-of-type),
         .streamlit-expanderHeader span:not(:first-of-type),
-        .streamlit-expanderHeader div:not(:first-of-type) {
-            display: none !important;
+        .streamlit-expanderHeader div:not(:first-of-type),
+        [data-testid="stExpander"] summary p:not([data-testid="stMarkdownContainer"] p),
+        [data-testid="stExpander"] summary span:not([data-testid="stIconMaterial"] span):not([data-testid="stMarkdownContainer"] span) {
+            /* Sadece markdown container içindeki p ve span'ları koru */
         }
         
         /* Expander header button içindeki tüm child elementleri kontrol et */
@@ -331,13 +362,16 @@ def set_design():
         /* Tüm expander içindeki aria-label içeren elementleri kontrol et */
         [data-testid="stExpander"] [aria-label],
         .streamlit-expanderHeader [aria-label] {
-            display: none !important;
+            /* aria-label'ları gizleme, sadece belirli içerikleri gizle */
         }
         
         /* Expander header içindeki tooltip container'larını gizle */
         [data-testid="stExpander"] [class*="tooltip"],
         [data-testid="stExpander"] [class*="hint"],
-        [data-testid="stExpander"] [class*="keyboard"] {
+        [data-testid="stExpander"] [class*="keyboard"],
+        [data-testid="stExpander"] summary [class*="tooltip"],
+        [data-testid="stExpander"] summary [class*="hint"],
+        [data-testid="stExpander"] summary [class*="keyboard"] {
             display: none !important;
         }
         
@@ -346,13 +380,18 @@ def set_design():
         .streamlit-expanderHeader .small,
         .streamlit-expanderHeader [class*="small"],
         .streamlit-expanderHeader [style*="font-size: 0"],
-        .streamlit-expanderHeader [style*="opacity: 0"] {
+        .streamlit-expanderHeader [style*="opacity: 0"],
+        [data-testid="stExpander"] summary small,
+        [data-testid="stExpander"] summary .small,
+        [data-testid="stExpander"] summary [class*="small"] {
             display: none !important;
         }
         
         /* Expander header button içindeki tüm text node'ları gizle */
         .streamlit-expanderHeader button::after,
-        .streamlit-expanderHeader button::before {
+        .streamlit-expanderHeader button::before,
+        [data-testid="stExpander"] summary::after,
+        [data-testid="stExpander"] summary::before {
             display: none !important;
             content: "" !important;
         }
@@ -472,20 +511,59 @@ def set_design():
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 80px 80px; pointer-events: none; z-index: -1;"></div>
     """, unsafe_allow_html=True)
     
-    # JavaScript ile expander title attribute'larını kaldır
+    # JavaScript ile expander title attribute'larını ve klavye kısayolu metinlerini kaldır
     st.markdown("""
     <script>
     function removeExpanderHints() {
         // Tüm expander'ları bul
         const expanders = document.querySelectorAll('[data-testid="stExpander"]');
         expanders.forEach(function(expander) {
-            // Expander header içindeki tüm title attribute'ları kaldır
+            // Expander içindeki tüm title attribute'ları kaldır
             const titleElements = expander.querySelectorAll('[title]');
             titleElements.forEach(function(el) {
                 el.removeAttribute('title');
             });
             
-            // Expander header button'un title'ını kaldır
+            // Summary elementi içindeki tüm title attribute'ları kaldır
+            const summary = expander.querySelector('summary');
+            if (summary) {
+                const summaryTitles = summary.querySelectorAll('[title]');
+                summaryTitles.forEach(function(el) {
+                    el.removeAttribute('title');
+                });
+                summary.removeAttribute('title');
+                
+                // Summary içindeki tüm child elementleri kontrol et
+                const allChildren = summary.querySelectorAll('*');
+                allChildren.forEach(function(child) {
+                    // aria-label içinde "Press", "Enter", "keyboard" gibi metinler varsa kaldır
+                    const ariaLabel = child.getAttribute('aria-label');
+                    if (ariaLabel && (ariaLabel.includes('Press') || ariaLabel.includes('Enter') || 
+                        ariaLabel.includes('keyboard') || ariaLabel.includes('↓') || ariaLabel.includes('↑'))) {
+                        child.removeAttribute('aria-label');
+                        child.style.display = 'none';
+                    }
+                    
+                    // Text içeriğinde klavye kısayolu metinleri varsa gizle
+                    if (child.textContent && (child.textContent.includes('Press') || 
+                        child.textContent.includes('Enter') || child.textContent.includes('keyboard') ||
+                        child.textContent.includes('↓') || child.textContent.includes('↑'))) {
+                        // Eğer bu element markdown container veya icon değilse gizle
+                        if (!child.closest('[data-testid="stMarkdownContainer"]') && 
+                            !child.closest('[data-testid="stIconMaterial"]')) {
+                            child.style.display = 'none';
+                            child.style.visibility = 'hidden';
+                            child.style.opacity = '0';
+                            child.style.fontSize = '0';
+                            child.style.width = '0';
+                            child.style.height = '0';
+                            child.style.overflow = 'hidden';
+                        }
+                    }
+                });
+            }
+            
+            // Expander header button'un title'ını kaldır (eski yapı için)
             const headerButton = expander.querySelector('.streamlit-expanderHeader button');
             if (headerButton) {
                 headerButton.removeAttribute('title');
@@ -500,19 +578,27 @@ def set_design():
         removeExpanderHints();
     }
     
-    // Streamlit'in rerun'larında da çalışması için
+    // Streamlit'in rerun'larında da çalışması için - daha sık kontrol et
+    setTimeout(removeExpanderHints, 50);
     setTimeout(removeExpanderHints, 100);
+    setTimeout(removeExpanderHints, 300);
     setTimeout(removeExpanderHints, 500);
     setTimeout(removeExpanderHints, 1000);
+    setTimeout(removeExpanderHints, 2000);
     
-    // MutationObserver ile dinamik değişiklikleri yakala
+    // MutationObserver ile dinamik değişiklikleri yakala - daha agresif
     const observer = new MutationObserver(function(mutations) {
         removeExpanderHints();
     });
     observer.observe(document.body, {
         childList: true,
-        subtree: true
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['title', 'aria-label']
     });
+    
+    // Periyodik kontrol (her 2 saniyede bir)
+    setInterval(removeExpanderHints, 2000);
     </script>
     """, unsafe_allow_html=True)
 
