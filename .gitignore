@@ -8,7 +8,13 @@ __pycache__/
 .streamlit/secrets.toml
 # Model dosyaları GitHub'a yüklenecek (Streamlit Cloud için gerekli)
 # *.pkl
+# Gerekli CSV dosyaları GitHub'a yüklenecek (Streamlit Cloud için)
+# lending_club_cleaned.csv
+# churn_processed_data_with_rational_salary.csv
+# Diğer CSV dosyaları ignore edilecek
 *.csv
+!lending_club_cleaned.csv
+!churn_processed_data_with_rational_salary.csv
 datasets/
 backup*/
 *.zip
