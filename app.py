@@ -287,20 +287,35 @@ def set_design():
             border: 1px solid var(--glass-border) !important;
         }
 
-        /* Expander klavye kısayolu metinlerini ve tooltip'leri gizle */
+        /* Expander klavye kısayolu metinlerini ve tooltip'leri gizle - Tüm olasılıklar */
         [data-testid="stExpander"] [title],
         [data-testid="stExpander"] .streamlit-expanderHeader [title],
         .streamlit-expanderHeader [title],
         [data-testid="stExpander"] p[title],
         [data-testid="stExpander"] span[title],
-        [data-testid="stExpander"] div[title] {
+        [data-testid="stExpander"] div[title],
+        [data-testid="stExpander"] button[title],
+        [data-testid="stExpander"] *[title] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            font-size: 0 !important;
         }
         
-        /* Expander header içindeki ikinci ve sonraki child elementleri gizle (sadece başlık kalsın) */
-        .streamlit-expanderHeader > *:not(:first-child) {
+        /* Expander header içindeki tüm title attribute'lu elementleri gizle */
+        .streamlit-expanderHeader [title],
+        .streamlit-expanderHeader *[title] {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        
+        /* Expander header içindeki ikinci ve sonraki child elementleri gizle */
+        .streamlit-expanderHeader > *:not(:first-child),
+        .streamlit-expanderHeader > div > *:not(:first-child) {
             display: none !important;
         }
         
@@ -310,9 +325,24 @@ def set_design():
         [data-testid="stExpander"] [title*="Enter"],
         [data-testid="stExpander"] [title*="↓"],
         [data-testid="stExpander"] [title*="▲"],
-        [data-testid="stExpander"] [title*="▼"] {
+        [data-testid="stExpander"] [title*="▼"],
+        [data-testid="stExpander"] [title*="up"],
+        [data-testid="stExpander"] [title*="down"] {
             display: none !important;
             visibility: hidden !important;
+        }
+        
+        /* Expander header button içindeki gereksiz elementleri gizle */
+        .streamlit-expanderHeader button[title],
+        .streamlit-expanderHeader button *[title] {
+            display: none !important;
+        }
+        
+        /* Tüm expander içindeki aria-label ve title içeren elementleri gizle */
+        [data-testid="stExpander"] [aria-label*="Press"],
+        [data-testid="stExpander"] [aria-label*="keyboard"],
+        [data-testid="stExpander"] [aria-label*="Enter"] {
+            display: none !important;
         }
 
         /* Tablo ve DataFrame Şeffaf Arka Plan ve Beyaz Metin Fix */
