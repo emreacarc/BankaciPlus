@@ -40,10 +40,12 @@ setup_config()
 
 # --- 1. GENEL AYARLAR ---
 # Proje kök dizinini belirle - Streamlit çalışma dizinini kullanır
-# Eğer dosyalar bulunamazsa alternatif yolu dene
 PROJECT_ROOT = os.getcwd()
-# Alternatif: Mutlak yol (G:\My Drive\BankaciPlus)
+
+# Streamlit Cloud için alternatif path kontrolü
+# Streamlit Cloud'da dosyalar genellikle proje kök dizininde olmalı
 if not os.path.exists(os.path.join(PROJECT_ROOT, 'credit_risk_model_20fold.pkl')):
+    # Alternatif: Windows local path (sadece local development için)
     alt_path = r"G:\My Drive\BankaciPlus"
     if os.path.exists(os.path.join(alt_path, 'credit_risk_model_20fold.pkl')):
         PROJECT_ROOT = alt_path
@@ -564,6 +566,28 @@ def enhance_data_with_products(df):
 @st.cache_resource(ttl=3600, show_spinner=False)
 def load_all_resources():
     try:
+        # Dosya yollarını kontrol et
+        required_files = {
+            'credit_risk_model_20fold.pkl': 'Credit Risk Pro Model',
+            'credit_risk_lite_model.pkl': 'Credit Risk Lite Model',
+            'lending_club_cleaned.csv': 'Lending Club Dataset',
+            'churn_model_v1.pkl': 'Churn Prediction Model'
+        }
+        
+        missing_files = []
+        for filename, description in required_files.items():
+            filepath = os.path.join(PROJECT_ROOT, filename)
+            if not os.path.exists(filepath):
+                missing_files.append(f"{description} ({filename})")
+        
+        if missing_files:
+            error_msg = f"⚠️ Eksik dosyalar bulundu:\n\n"
+            error_msg += "\n".join([f"• {f}" for f in missing_files])
+            error_msg += f"\n\n📁 Arama yapılan dizin: `{PROJECT_ROOT}`"
+            error_msg += f"\n\n💡 Lütfen bu dosyaları proje kök dizinine ekleyin."
+            st.error(error_msg)
+            return None, None, None, None, None, None, None, None, None
+        
         # PROJECT_ROOT global değişkenini kullan
         pro_m = joblib.load(os.path.join(PROJECT_ROOT, 'credit_risk_model_20fold.pkl'))
         lite_m = joblib.load(os.path.join(PROJECT_ROOT, 'credit_risk_lite_model.pkl'))
@@ -620,28 +644,52 @@ def load_all_resources():
                 if os.path.exists(scaler_file):
                     os.remove(scaler_file)
                 # Yeniden oluştur
-                df_churn_raw = pd.read_csv(raw_file)
-                df_churn_proc, kmeans_m, scaler_m, cluster_map, sil_val = enhance_data_with_products(df_churn_raw)
-                df_churn_proc.to_csv(processed_file, index=False)
-                joblib.dump(kmeans_m, kmeans_file)
-                joblib.dump(scaler_m, scaler_file)
-                st.info(f"✅ Yeni cluster bilgileri ve modeller hesaplandı ve kaydedildi.")
+                if not os.path.exists(raw_file):
+                    st.error(f"❌ Churn veri dosyası bulunamadı: {raw_file}")
+                    df_churn_proc = pd.DataFrame()
+                    kmeans_m = None
+                    scaler_m = None
+                    cluster_map = {}
+                    sil_val = 0.0
+                else:
+                    df_churn_raw = pd.read_csv(raw_file)
+                    df_churn_proc, kmeans_m, scaler_m, cluster_map, sil_val = enhance_data_with_products(df_churn_raw)
+                    df_churn_proc.to_csv(processed_file, index=False)
+                    joblib.dump(kmeans_m, kmeans_file)
+                    joblib.dump(scaler_m, scaler_file)
+                    st.info(f"✅ Yeni cluster bilgileri ve modeller hesaplandı ve kaydedildi.")
             else:
                 # Başarıyla yüklendi, devam et
                 pass
         else:
             # İlk kez çalışıyor - cluster hesapla ve kaydet
-            df_churn_raw = pd.read_csv(raw_file)
-            df_churn_proc, kmeans_m, scaler_m, cluster_map, sil_val = enhance_data_with_products(df_churn_raw)
-            
-            # İşlenmiş veriyi kaydet (cluster bilgisiyle birlikte)
-            df_churn_proc.to_csv(processed_file, index=False)
-            
-            # Modelleri kaydet (manuel segment tahmini için)
-            joblib.dump(kmeans_m, kmeans_file)
-            joblib.dump(scaler_m, scaler_file)
-            
-            st.info(f"✅ Cluster bilgileri ve modeller hesaplandı ve kaydedildi.")
+            if not os.path.exists(raw_file):
+                st.warning(f"⚠️ Churn veri dosyası bulunamadı: {raw_file}\n\nNBA modülü çalışmayacak.")
+                df_churn_proc = pd.DataFrame()
+                kmeans_m = None
+                scaler_m = None
+                cluster_map = {}
+                sil_val = 0.0
+            else:
+                try:
+                    df_churn_raw = pd.read_csv(raw_file)
+                    df_churn_proc, kmeans_m, scaler_m, cluster_map, sil_val = enhance_data_with_products(df_churn_raw)
+                    
+                    # İşlenmiş veriyi kaydet (cluster bilgisiyle birlikte)
+                    df_churn_proc.to_csv(processed_file, index=False)
+                    
+                    # Modelleri kaydet (manuel segment tahmini için)
+                    joblib.dump(kmeans_m, kmeans_file)
+                    joblib.dump(scaler_m, scaler_file)
+                    
+                    st.info(f"✅ Cluster bilgileri ve modeller hesaplandı ve kaydedildi.")
+                except Exception as e:
+                    st.error(f"❌ Churn veri işleme hatası: {e}")
+                    df_churn_proc = pd.DataFrame()
+                    kmeans_m = None
+                    scaler_m = None
+                    cluster_map = {}
+                    sil_val = 0.0
         
         if 'User_ID' not in df_churn_proc.columns:
             np.random.seed(42)
@@ -649,8 +697,11 @@ def load_all_resources():
             df_churn_proc.insert(0, 'User_ID', ids)
             
         return pro_m, lite_m, df_risk, churn_m, df_churn_proc, kmeans_m, scaler_m, cluster_map, sil_val
+    except FileNotFoundError as e:
+        st.error(f"❌ Dosya bulunamadı: {e}\n\n📁 Arama yapılan dizin: `{PROJECT_ROOT}`\n\n💡 Lütfen gerekli model ve veri dosyalarını proje kök dizinine ekleyin.")
+        return None, None, None, None, None, None, None, None, None
     except Exception as e:
-        st.error(f"Dosya yükleme hatası: {e}")
+        st.error(f"❌ Dosya yükleme hatası: {e}\n\n📁 Arama yapılan dizin: `{PROJECT_ROOT}`")
         return None, None, None, None, None, None, None, None, None
 
 

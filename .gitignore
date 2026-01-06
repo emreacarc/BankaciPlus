@@ -6,7 +6,8 @@ __pycache__/
 .DS_Store
 .env
 .streamlit/secrets.toml
-*.pkl
+# Model dosyaları GitHub'a yüklenecek (Streamlit Cloud için gerekli)
+# *.pkl
 *.csv
 datasets/
 backup*/
