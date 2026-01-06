@@ -1,0 +1,277 @@
+================================================================================
+CHURN TAHMIN MODELLERI KARSILASTIRMASI
+50 Katli Cross-Validation Testi
+================================================================================
+Baslangic Zamani: 2026-01-06 16:29:09
+
+NOT: Ilerleme raporlari konsolda gorunecektir.
+     Eger gormuyorsaniz, scripti kendi terminalinizde calistirin.
+
+>>> [1/5] Veri yukleniyor ve ozellik muhendisligi yapiliyor...
+   Toplam kayit: 10000
+   Ozellik sayisi: 18
+   Hedef degisken dagilimi: {0: 7962, 1: 2038}
+
+>>> [2/5] Preprocessing yapiliyor...
+
+>>> [3/5] Modeller tanimlaniyor...
+
+>>> [4/5] 50 katli Cross-Validation baslatiliyor...
+   Her fold'da ilerleme raporu gosterilecek...
+
+
+   [1/3] XGBoost (Mevcut) test ediliyor...
+   Toplam 50 fold islenecek...
+
+      >>> ROC-AUC ve Accuracy skorlari hesaplaniyor...
+      Fold 1/50 tamamlandi | ROC-AUC: 0.7869 | Accuracy: 0.8400 | Ilerleme: %2.0 | Kalan: ~90.4 saniye
+      Fold 2/50 tamamlandi | ROC-AUC: 0.8339 | Accuracy: 0.8450 | Ilerleme: %4.0 | Kalan: ~46.6 saniye
+      Fold 3/50 tamamlandi | ROC-AUC: 0.8969 | Accuracy: 0.8750 | Ilerleme: %6.0 | Kalan: ~31.9 saniye
+      Fold 4/50 tamamlandi | ROC-AUC: 0.9015 | Accuracy: 0.8900 | Ilerleme: %8.0 | Kalan: ~24.4 saniye
+      Fold 5/50 tamamlandi | ROC-AUC: 0.8471 | Accuracy: 0.8350 | Ilerleme: %10.0 | Kalan: ~19.9 saniye
+      Fold 6/50 tamamlandi | ROC-AUC: 0.8794 | Accuracy: 0.8600 | Ilerleme: %12.0 | Kalan: ~16.9 saniye
+      Fold 7/50 tamamlandi | ROC-AUC: 0.9311 | Accuracy: 0.8700 | Ilerleme: %14.0 | Kalan: ~14.7 saniye
+      Fold 8/50 tamamlandi | ROC-AUC: 0.9041 | Accuracy: 0.8400 | Ilerleme: %16.0 | Kalan: ~13.0 saniye
+      Fold 9/50 tamamlandi | ROC-AUC: 0.8302 | Accuracy: 0.8150 | Ilerleme: %18.0 | Kalan: ~11.7 saniye
+      Fold 10/50 tamamlandi | ROC-AUC: 0.7975 | Accuracy: 0.8300 | Ilerleme: %20.0 | Kalan: ~10.6 saniye
+      Fold 11/50 tamamlandi | ROC-AUC: 0.8702 | Accuracy: 0.8650 | Ilerleme: %22.0 | Kalan: ~9.7 saniye
+      Fold 12/50 tamamlandi | ROC-AUC: 0.8101 | Accuracy: 0.8200 | Ilerleme: %24.0 | Kalan: ~9.0 saniye
+      Fold 13/50 tamamlandi | ROC-AUC: 0.8684 | Accuracy: 0.8850 | Ilerleme: %26.0 | Kalan: ~8.3 saniye
+      Fold 14/50 tamamlandi | ROC-AUC: 0.8056 | Accuracy: 0.8400 | Ilerleme: %28.0 | Kalan: ~7.7 saniye
+      Fold 15/50 tamamlandi | ROC-AUC: 0.8822 | Accuracy: 0.8600 | Ilerleme: %30.0 | Kalan: ~7.2 saniye
+      Fold 16/50 tamamlandi | ROC-AUC: 0.8543 | Accuracy: 0.8700 | Ilerleme: %32.0 | Kalan: ~6.8 saniye
+      Fold 17/50 tamamlandi | ROC-AUC: 0.9245 | Accuracy: 0.8700 | Ilerleme: %34.0 | Kalan: ~6.3 saniye
+      Fold 18/50 tamamlandi | ROC-AUC: 0.8076 | Accuracy: 0.8550 | Ilerleme: %36.0 | Kalan: ~6.0 saniye
+      Fold 19/50 tamamlandi | ROC-AUC: 0.8756 | Accuracy: 0.8900 | Ilerleme: %38.0 | Kalan: ~5.6 saniye
+      Fold 20/50 tamamlandi | ROC-AUC: 0.9256 | Accuracy: 0.8950 | Ilerleme: %40.0 | Kalan: ~5.3 saniye
+      Fold 21/50 tamamlandi | ROC-AUC: 0.9015 | Accuracy: 0.8950 | Ilerleme: %42.0 | Kalan: ~5.0 saniye
+      Fold 22/50 tamamlandi | ROC-AUC: 0.8678 | Accuracy: 0.8550 | Ilerleme: %44.0 | Kalan: ~4.7 saniye
+      Fold 23/50 tamamlandi | ROC-AUC: 0.9017 | Accuracy: 0.8900 | Ilerleme: %46.0 | Kalan: ~4.5 saniye
+      Fold 24/50 tamamlandi | ROC-AUC: 0.8184 | Accuracy: 0.8450 | Ilerleme: %48.0 | Kalan: ~4.2 saniye
+      Fold 25/50 tamamlandi | ROC-AUC: 0.8489 | Accuracy: 0.8450 | Ilerleme: %50.0 | Kalan: ~4.0 saniye
+      Fold 26/50 tamamlandi | ROC-AUC: 0.8713 | Accuracy: 0.8550 | Ilerleme: %52.0 | Kalan: ~3.8 saniye
+      Fold 27/50 tamamlandi | ROC-AUC: 0.8351 | Accuracy: 0.8750 | Ilerleme: %54.0 | Kalan: ~3.5 saniye
+      Fold 28/50 tamamlandi | ROC-AUC: 0.8484 | Accuracy: 0.8650 | Ilerleme: %56.0 | Kalan: ~3.3 saniye
+      Fold 29/50 tamamlandi | ROC-AUC: 0.8589 | Accuracy: 0.8600 | Ilerleme: %58.0 | Kalan: ~3.1 saniye
+      Fold 30/50 tamamlandi | ROC-AUC: 0.8652 | Accuracy: 0.8350 | Ilerleme: %60.0 | Kalan: ~2.9 saniye
+      Fold 31/50 tamamlandi | ROC-AUC: 0.9049 | Accuracy: 0.8650 | Ilerleme: %62.0 | Kalan: ~2.8 saniye
+      Fold 32/50 tamamlandi | ROC-AUC: 0.8033 | Accuracy: 0.8550 | Ilerleme: %64.0 | Kalan: ~2.6 saniye
+      Fold 33/50 tamamlandi | ROC-AUC: 0.9018 | Accuracy: 0.8850 | Ilerleme: %66.0 | Kalan: ~2.4 saniye
+      Fold 34/50 tamamlandi | ROC-AUC: 0.8753 | Accuracy: 0.8950 | Ilerleme: %68.0 | Kalan: ~2.2 saniye
+      Fold 35/50 tamamlandi | ROC-AUC: 0.8911 | Accuracy: 0.8700 | Ilerleme: %70.0 | Kalan: ~2.1 saniye
+      Fold 36/50 tamamlandi | ROC-AUC: 0.9054 | Accuracy: 0.8800 | Ilerleme: %72.0 | Kalan: ~1.9 saniye
+      Fold 37/50 tamamlandi | ROC-AUC: 0.8906 | Accuracy: 0.8650 | Ilerleme: %74.0 | Kalan: ~1.8 saniye
+      Fold 38/50 tamamlandi | ROC-AUC: 0.8322 | Accuracy: 0.8500 | Ilerleme: %76.0 | Kalan: ~1.6 saniye
+      Fold 39/50 tamamlandi | ROC-AUC: 0.8698 | Accuracy: 0.8650 | Ilerleme: %78.0 | Kalan: ~1.5 saniye
+      Fold 40/50 tamamlandi | ROC-AUC: 0.8567 | Accuracy: 0.8700 | Ilerleme: %80.0 | Kalan: ~1.3 saniye
+      Fold 41/50 tamamlandi | ROC-AUC: 0.8773 | Accuracy: 0.8700 | Ilerleme: %82.0 | Kalan: ~1.2 saniye
+      Fold 42/50 tamamlandi | ROC-AUC: 0.8773 | Accuracy: 0.8600 | Ilerleme: %84.0 | Kalan: ~1.0 saniye
+      Fold 43/50 tamamlandi | ROC-AUC: 0.8923 | Accuracy: 0.8550 | Ilerleme: %86.0 | Kalan: ~0.9 saniye
+      Fold 44/50 tamamlandi | ROC-AUC: 0.9028 | Accuracy: 0.8850 | Ilerleme: %88.0 | Kalan: ~0.8 saniye
+      Fold 45/50 tamamlandi | ROC-AUC: 0.8836 | Accuracy: 0.8700 | Ilerleme: %90.0 | Kalan: ~0.6 saniye
+      Fold 46/50 tamamlandi | ROC-AUC: 0.8517 | Accuracy: 0.8800 | Ilerleme: %92.0 | Kalan: ~0.5 saniye
+      Fold 47/50 tamamlandi | ROC-AUC: 0.8731 | Accuracy: 0.8650 | Ilerleme: %94.0 | Kalan: ~0.4 saniye
+      Fold 48/50 tamamlandi | ROC-AUC: 0.7973 | Accuracy: 0.8400 | Ilerleme: %96.0 | Kalan: ~0.3 saniye
+      Fold 49/50 tamamlandi | ROC-AUC: 0.8934 | Accuracy: 0.8850 | Ilerleme: %98.0 | Kalan: ~0.1 saniye
+      Fold 50/50 tamamlandi | ROC-AUC: 0.9144 | Accuracy: 0.8900 | Ilerleme: %100.0 | Kalan: ~0.0 saniye
+      Tamamlandi! (Sure: 6.21 saniye)
+
+   [2/3] LightGBM test ediliyor...
+   Toplam 50 fold islenecek...
+
+      >>> ROC-AUC ve Accuracy skorlari hesaplaniyor...
+      Fold 1/50 tamamlandi | ROC-AUC: 0.7895 | Accuracy: 0.8300 | Ilerleme: %2.0 | Kalan: ~5.1 saniye
+      Fold 2/50 tamamlandi | ROC-AUC: 0.8399 | Accuracy: 0.8450 | Ilerleme: %4.0 | Kalan: ~4.9 saniye
+      Fold 3/50 tamamlandi | ROC-AUC: 0.8948 | Accuracy: 0.8850 | Ilerleme: %6.0 | Kalan: ~4.7 saniye
+      Fold 4/50 tamamlandi | ROC-AUC: 0.8991 | Accuracy: 0.8900 | Ilerleme: %8.0 | Kalan: ~4.5 saniye
+      Fold 5/50 tamamlandi | ROC-AUC: 0.8414 | Accuracy: 0.8350 | Ilerleme: %10.0 | Kalan: ~4.3 saniye
+      Fold 6/50 tamamlandi | ROC-AUC: 0.8846 | Accuracy: 0.8600 | Ilerleme: %12.0 | Kalan: ~4.2 saniye
+      Fold 7/50 tamamlandi | ROC-AUC: 0.9204 | Accuracy: 0.8800 | Ilerleme: %14.0 | Kalan: ~4.1 saniye
+      Fold 8/50 tamamlandi | ROC-AUC: 0.9027 | Accuracy: 0.8700 | Ilerleme: %16.0 | Kalan: ~4.0 saniye
+      Fold 9/50 tamamlandi | ROC-AUC: 0.8376 | Accuracy: 0.8350 | Ilerleme: %18.0 | Kalan: ~3.8 saniye
+      Fold 10/50 tamamlandi | ROC-AUC: 0.8098 | Accuracy: 0.8350 | Ilerleme: %20.0 | Kalan: ~3.7 saniye
+      Fold 11/50 tamamlandi | ROC-AUC: 0.8644 | Accuracy: 0.8650 | Ilerleme: %22.0 | Kalan: ~3.7 saniye
+      Fold 12/50 tamamlandi | ROC-AUC: 0.7986 | Accuracy: 0.8200 | Ilerleme: %24.0 | Kalan: ~3.6 saniye
+      Fold 13/50 tamamlandi | ROC-AUC: 0.8613 | Accuracy: 0.8800 | Ilerleme: %26.0 | Kalan: ~3.5 saniye
+      Fold 14/50 tamamlandi | ROC-AUC: 0.8081 | Accuracy: 0.8400 | Ilerleme: %28.0 | Kalan: ~3.4 saniye
+      Fold 15/50 tamamlandi | ROC-AUC: 0.8733 | Accuracy: 0.8650 | Ilerleme: %30.0 | Kalan: ~3.3 saniye
+      Fold 16/50 tamamlandi | ROC-AUC: 0.8540 | Accuracy: 0.8750 | Ilerleme: %32.0 | Kalan: ~3.2 saniye
+      Fold 17/50 tamamlandi | ROC-AUC: 0.9281 | Accuracy: 0.8750 | Ilerleme: %34.0 | Kalan: ~3.1 saniye
+      Fold 18/50 tamamlandi | ROC-AUC: 0.8087 | Accuracy: 0.8600 | Ilerleme: %36.0 | Kalan: ~3.0 saniye
+      Fold 19/50 tamamlandi | ROC-AUC: 0.8644 | Accuracy: 0.8950 | Ilerleme: %38.0 | Kalan: ~2.9 saniye
+      Fold 20/50 tamamlandi | ROC-AUC: 0.9277 | Accuracy: 0.8950 | Ilerleme: %40.0 | Kalan: ~2.8 saniye
+      Fold 21/50 tamamlandi | ROC-AUC: 0.9086 | Accuracy: 0.8900 | Ilerleme: %42.0 | Kalan: ~2.7 saniye
+      Fold 22/50 tamamlandi | ROC-AUC: 0.8713 | Accuracy: 0.8700 | Ilerleme: %44.0 | Kalan: ~2.6 saniye
+      Fold 23/50 tamamlandi | ROC-AUC: 0.9057 | Accuracy: 0.8800 | Ilerleme: %46.0 | Kalan: ~2.5 saniye
+      Fold 24/50 tamamlandi | ROC-AUC: 0.8201 | Accuracy: 0.8200 | Ilerleme: %48.0 | Kalan: ~2.4 saniye
+      Fold 25/50 tamamlandi | ROC-AUC: 0.8572 | Accuracy: 0.8500 | Ilerleme: %50.0 | Kalan: ~2.3 saniye
+      Fold 26/50 tamamlandi | ROC-AUC: 0.8793 | Accuracy: 0.8500 | Ilerleme: %52.0 | Kalan: ~2.3 saniye
+      Fold 27/50 tamamlandi | ROC-AUC: 0.8498 | Accuracy: 0.8800 | Ilerleme: %54.0 | Kalan: ~2.2 saniye
+      Fold 28/50 tamamlandi | ROC-AUC: 0.8412 | Accuracy: 0.8650 | Ilerleme: %56.0 | Kalan: ~2.1 saniye
+      Fold 29/50 tamamlandi | ROC-AUC: 0.8527 | Accuracy: 0.8650 | Ilerleme: %58.0 | Kalan: ~2.0 saniye
+      Fold 30/50 tamamlandi | ROC-AUC: 0.8730 | Accuracy: 0.8650 | Ilerleme: %60.0 | Kalan: ~1.9 saniye
+      Fold 31/50 tamamlandi | ROC-AUC: 0.9011 | Accuracy: 0.8750 | Ilerleme: %62.0 | Kalan: ~1.8 saniye
+      Fold 32/50 tamamlandi | ROC-AUC: 0.8113 | Accuracy: 0.8650 | Ilerleme: %64.0 | Kalan: ~1.7 saniye
+      Fold 33/50 tamamlandi | ROC-AUC: 0.8995 | Accuracy: 0.8750 | Ilerleme: %66.0 | Kalan: ~1.6 saniye
+      Fold 34/50 tamamlandi | ROC-AUC: 0.8825 | Accuracy: 0.8950 | Ilerleme: %68.0 | Kalan: ~1.5 saniye
+      Fold 35/50 tamamlandi | ROC-AUC: 0.8843 | Accuracy: 0.8550 | Ilerleme: %70.0 | Kalan: ~1.4 saniye
+      Fold 36/50 tamamlandi | ROC-AUC: 0.9057 | Accuracy: 0.8800 | Ilerleme: %72.0 | Kalan: ~1.3 saniye
+      Fold 37/50 tamamlandi | ROC-AUC: 0.8977 | Accuracy: 0.8650 | Ilerleme: %74.0 | Kalan: ~1.2 saniye
+      Fold 38/50 tamamlandi | ROC-AUC: 0.8285 | Accuracy: 0.8400 | Ilerleme: %76.0 | Kalan: ~1.1 saniye
+      Fold 39/50 tamamlandi | ROC-AUC: 0.8678 | Accuracy: 0.8550 | Ilerleme: %78.0 | Kalan: ~1.0 saniye
+      Fold 40/50 tamamlandi | ROC-AUC: 0.8639 | Accuracy: 0.8850 | Ilerleme: %80.0 | Kalan: ~0.9 saniye
+      Fold 41/50 tamamlandi | ROC-AUC: 0.8825 | Accuracy: 0.8700 | Ilerleme: %82.0 | Kalan: ~0.8 saniye
+      Fold 42/50 tamamlandi | ROC-AUC: 0.8708 | Accuracy: 0.8700 | Ilerleme: %84.0 | Kalan: ~0.8 saniye
+      Fold 43/50 tamamlandi | ROC-AUC: 0.8877 | Accuracy: 0.8450 | Ilerleme: %86.0 | Kalan: ~0.7 saniye
+      Fold 44/50 tamamlandi | ROC-AUC: 0.8992 | Accuracy: 0.8850 | Ilerleme: %88.0 | Kalan: ~0.6 saniye
+      Fold 45/50 tamamlandi | ROC-AUC: 0.8875 | Accuracy: 0.8600 | Ilerleme: %90.0 | Kalan: ~0.5 saniye
+      Fold 46/50 tamamlandi | ROC-AUC: 0.8500 | Accuracy: 0.8650 | Ilerleme: %92.0 | Kalan: ~0.4 saniye
+      Fold 47/50 tamamlandi | ROC-AUC: 0.8755 | Accuracy: 0.8750 | Ilerleme: %94.0 | Kalan: ~0.3 saniye
+      Fold 48/50 tamamlandi | ROC-AUC: 0.7859 | Accuracy: 0.8350 | Ilerleme: %96.0 | Kalan: ~0.2 saniye
+      Fold 49/50 tamamlandi | ROC-AUC: 0.8906 | Accuracy: 0.8700 | Ilerleme: %98.0 | Kalan: ~0.1 saniye
+      Fold 50/50 tamamlandi | ROC-AUC: 0.9208 | Accuracy: 0.8900 | Ilerleme: %100.0 | Kalan: ~0.0 saniye
+      Tamamlandi! (Sure: 4.74 saniye)
+
+   [3/3] CatBoost test ediliyor...
+   Toplam 50 fold islenecek...
+
+      >>> ROC-AUC ve Accuracy skorlari hesaplaniyor...
+      Fold 1/50 tamamlandi | ROC-AUC: 0.7967 | Accuracy: 0.8400 | Ilerleme: %2.0 | Kalan: ~33.0 saniye
+      Fold 2/50 tamamlandi | ROC-AUC: 0.8464 | Accuracy: 0.8450 | Ilerleme: %4.0 | Kalan: ~26.4 saniye
+      Fold 3/50 tamamlandi | ROC-AUC: 0.8889 | Accuracy: 0.8800 | Ilerleme: %6.0 | Kalan: ~23.7 saniye
+      Fold 4/50 tamamlandi | ROC-AUC: 0.9103 | Accuracy: 0.8900 | Ilerleme: %8.0 | Kalan: ~22.5 saniye
+      Fold 5/50 tamamlandi | ROC-AUC: 0.8472 | Accuracy: 0.8300 | Ilerleme: %10.0 | Kalan: ~21.3 saniye
+      Fold 6/50 tamamlandi | ROC-AUC: 0.8923 | Accuracy: 0.8700 | Ilerleme: %12.0 | Kalan: ~20.5 saniye
+      Fold 7/50 tamamlandi | ROC-AUC: 0.9256 | Accuracy: 0.8700 | Ilerleme: %14.0 | Kalan: ~19.8 saniye
+      Fold 8/50 tamamlandi | ROC-AUC: 0.9018 | Accuracy: 0.8550 | Ilerleme: %16.0 | Kalan: ~19.2 saniye
+      Fold 9/50 tamamlandi | ROC-AUC: 0.8316 | Accuracy: 0.8550 | Ilerleme: %18.0 | Kalan: ~18.6 saniye
+      Fold 10/50 tamamlandi | ROC-AUC: 0.8119 | Accuracy: 0.8450 | Ilerleme: %20.0 | Kalan: ~17.9 saniye
+      Fold 11/50 tamamlandi | ROC-AUC: 0.8616 | Accuracy: 0.8650 | Ilerleme: %22.0 | Kalan: ~17.4 saniye
+      Fold 12/50 tamamlandi | ROC-AUC: 0.8043 | Accuracy: 0.8300 | Ilerleme: %24.0 | Kalan: ~16.9 saniye
+      Fold 13/50 tamamlandi | ROC-AUC: 0.8715 | Accuracy: 0.8900 | Ilerleme: %26.0 | Kalan: ~16.4 saniye
+      Fold 14/50 tamamlandi | ROC-AUC: 0.8087 | Accuracy: 0.8450 | Ilerleme: %28.0 | Kalan: ~16.0 saniye
+      Fold 15/50 tamamlandi | ROC-AUC: 0.8880 | Accuracy: 0.8550 | Ilerleme: %30.0 | Kalan: ~15.5 saniye
+      Fold 16/50 tamamlandi | ROC-AUC: 0.8649 | Accuracy: 0.8950 | Ilerleme: %32.0 | Kalan: ~15.0 saniye
+      Fold 17/50 tamamlandi | ROC-AUC: 0.9254 | Accuracy: 0.8750 | Ilerleme: %34.0 | Kalan: ~14.5 saniye
+      Fold 18/50 tamamlandi | ROC-AUC: 0.8173 | Accuracy: 0.8600 | Ilerleme: %36.0 | Kalan: ~14.1 saniye
+      Fold 19/50 tamamlandi | ROC-AUC: 0.8656 | Accuracy: 0.8950 | Ilerleme: %38.0 | Kalan: ~13.7 saniye
+      Fold 20/50 tamamlandi | ROC-AUC: 0.9281 | Accuracy: 0.9100 | Ilerleme: %40.0 | Kalan: ~13.2 saniye
+      Fold 21/50 tamamlandi | ROC-AUC: 0.9093 | Accuracy: 0.8900 | Ilerleme: %42.0 | Kalan: ~12.7 saniye
+      Fold 22/50 tamamlandi | ROC-AUC: 0.8753 | Accuracy: 0.8600 | Ilerleme: %44.0 | Kalan: ~12.3 saniye
+      Fold 23/50 tamamlandi | ROC-AUC: 0.8935 | Accuracy: 0.8850 | Ilerleme: %46.0 | Kalan: ~11.9 saniye
+      Fold 24/50 tamamlandi | ROC-AUC: 0.8288 | Accuracy: 0.8400 | Ilerleme: %48.0 | Kalan: ~11.4 saniye
+      Fold 25/50 tamamlandi | ROC-AUC: 0.8541 | Accuracy: 0.8350 | Ilerleme: %50.0 | Kalan: ~11.0 saniye
+      Fold 26/50 tamamlandi | ROC-AUC: 0.8802 | Accuracy: 0.8650 | Ilerleme: %52.0 | Kalan: ~10.5 saniye
+      Fold 27/50 tamamlandi | ROC-AUC: 0.8464 | Accuracy: 0.8550 | Ilerleme: %54.0 | Kalan: ~10.1 saniye
+      Fold 28/50 tamamlandi | ROC-AUC: 0.8599 | Accuracy: 0.8550 | Ilerleme: %56.0 | Kalan: ~9.6 saniye
+      Fold 29/50 tamamlandi | ROC-AUC: 0.8721 | Accuracy: 0.8550 | Ilerleme: %58.0 | Kalan: ~9.2 saniye
+      Fold 30/50 tamamlandi | ROC-AUC: 0.8662 | Accuracy: 0.8550 | Ilerleme: %60.0 | Kalan: ~8.7 saniye
+      Fold 31/50 tamamlandi | ROC-AUC: 0.9073 | Accuracy: 0.8550 | Ilerleme: %62.0 | Kalan: ~8.3 saniye
+      Fold 32/50 tamamlandi | ROC-AUC: 0.8351 | Accuracy: 0.8500 | Ilerleme: %64.0 | Kalan: ~7.9 saniye
+      Fold 33/50 tamamlandi | ROC-AUC: 0.9011 | Accuracy: 0.8850 | Ilerleme: %66.0 | Kalan: ~7.4 saniye
+      Fold 34/50 tamamlandi | ROC-AUC: 0.8761 | Accuracy: 0.8750 | Ilerleme: %68.0 | Kalan: ~7.0 saniye
+      Fold 35/50 tamamlandi | ROC-AUC: 0.9024 | Accuracy: 0.8700 | Ilerleme: %70.0 | Kalan: ~6.6 saniye
+      Fold 36/50 tamamlandi | ROC-AUC: 0.8917 | Accuracy: 0.8800 | Ilerleme: %72.0 | Kalan: ~6.1 saniye
+      Fold 37/50 tamamlandi | ROC-AUC: 0.8928 | Accuracy: 0.8550 | Ilerleme: %74.0 | Kalan: ~5.7 saniye
+      Fold 38/50 tamamlandi | ROC-AUC: 0.8412 | Accuracy: 0.8500 | Ilerleme: %76.0 | Kalan: ~5.3 saniye
+      Fold 39/50 tamamlandi | ROC-AUC: 0.8819 | Accuracy: 0.8500 | Ilerleme: %78.0 | Kalan: ~4.8 saniye
+      Fold 40/50 tamamlandi | ROC-AUC: 0.8555 | Accuracy: 0.8850 | Ilerleme: %80.0 | Kalan: ~4.4 saniye
+      Fold 41/50 tamamlandi | ROC-AUC: 0.8800 | Accuracy: 0.8600 | Ilerleme: %82.0 | Kalan: ~3.9 saniye
+      Fold 42/50 tamamlandi | ROC-AUC: 0.8902 | Accuracy: 0.8650 | Ilerleme: %84.0 | Kalan: ~3.5 saniye
+      Fold 43/50 tamamlandi | ROC-AUC: 0.8964 | Accuracy: 0.8650 | Ilerleme: %86.0 | Kalan: ~3.1 saniye
+      Fold 44/50 tamamlandi | ROC-AUC: 0.9103 | Accuracy: 0.8800 | Ilerleme: %88.0 | Kalan: ~2.6 saniye
+      Fold 45/50 tamamlandi | ROC-AUC: 0.8952 | Accuracy: 0.8750 | Ilerleme: %90.0 | Kalan: ~2.2 saniye
+      Fold 46/50 tamamlandi | ROC-AUC: 0.8586 | Accuracy: 0.8650 | Ilerleme: %92.0 | Kalan: ~1.8 saniye
+      Fold 47/50 tamamlandi | ROC-AUC: 0.8639 | Accuracy: 0.8800 | Ilerleme: %94.0 | Kalan: ~1.3 saniye
+      Fold 48/50 tamamlandi | ROC-AUC: 0.8139 | Accuracy: 0.8400 | Ilerleme: %96.0 | Kalan: ~0.9 saniye
+      Fold 49/50 tamamlandi | ROC-AUC: 0.9028 | Accuracy: 0.8750 | Ilerleme: %98.0 | Kalan: ~0.4 saniye
+      Fold 50/50 tamamlandi | ROC-AUC: 0.9142 | Accuracy: 0.8950 | Ilerleme: %100.0 | Kalan: ~0.0 saniye
+      Tamamlandi! (Sure: 21.93 saniye)
+
+>>> [5/5] Rapor olusturuluyor...
+
+================================================================================
+SONUCLAR - 50 KATLI CROSS-VALIDATION
+================================================================================
+
+ROC-AUC SKORLARI:
+--------------------------------------------------------------------------------
+Model                     Ortalama        Std Sapma       Min             Max            
+--------------------------------------------------------------------------------
+XGBoost (Mevcut)           86.69%        3.67%       78.69%       93.11%
+LightGBM                   86.72%        3.64%       78.59%       92.81%
+CatBoost                   87.17%        3.38%       79.67%       92.81%
+
+ACCURACY SKORLARI:
+--------------------------------------------------------------------------------
+Model                     Ortalama        Std Sapma       Min             Max            
+--------------------------------------------------------------------------------
+XGBoost (Mevcut)           86.34%        1.98%       81.50%       89.50%
+LightGBM                   86.45%        1.96%       82.00%       89.50%
+CatBoost                   86.50%        1.86%       83.00%       91.00%
+
+================================================================================
+PERFORMANS KARSILASTIRMASI
+================================================================================
+
+En Iyi ROC-AUC: CatBoost (87.17%)
+   XGBoost'a gore iyilestirme: +0.48%
+
+En Iyi Accuracy: CatBoost (86.50%)
+   XGBoost'a gore iyilestirme: +0.16%
+
+================================================================================
+HIZ KARSILASTIRMASI
+================================================================================
+Model                     Sure (saniye)  
+--------------------------------------------------------------------------------
+XGBoost (Mevcut)            6.21
+LightGBM                    4.74
+CatBoost                   21.93
+
+================================================================================
+DETAYLI ISTATISTIKLER
+================================================================================
+
+
+XGBoost (Mevcut):
+  ROC-AUC:
+    Ortalama: 86.6892%
+    Std Sapma: 3.6685%
+    Medyan: 87.2212%
+    Q1 (25%): 84.7408%
+    Q3 (75%): 89.6047%
+  Accuracy:
+    Ortalama: 86.3400%
+    Std Sapma: 1.9785%
+    Medyan: 86.5000%
+
+LightGBM:
+  ROC-AUC:
+    Ortalama: 86.7199%
+    Std Sapma: 3.6384%
+    Medyan: 87.2143%
+    Q1 (25%): 84.3496%
+    Q3 (75%): 89.6955%
+  Accuracy:
+    Ortalama: 86.4500%
+    Std Sapma: 1.9577%
+    Medyan: 86.5000%
+
+CatBoost:
+  ROC-AUC:
+    Ortalama: 87.1695%
+    Std Sapma: 3.3755%
+    Medyan: 87.5671%
+    Q1 (25%): 84.8942%
+    Q3 (75%): 89.6094%
+  Accuracy:
+    Ortalama: 86.5000%
+    Std Sapma: 1.8574%
+    Medyan: 86.5000%
+
+================================================================================
+Bitis Zamani: 2026-01-06 16:29:42
+================================================================================
+
+Detayli log dosyasi: model_comparison_log.txt
