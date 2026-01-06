@@ -268,10 +268,12 @@ BankaciPlus/
 │   ├── lending_club_cleaned.csv
 │   └── bank_customer_churn_data/
 │       └── Customer-Churn-Records.csv
-├── models/                         # Model dosyaları (git'te yok)
-│   ├── credit_risk_model_20fold.pkl
-│   ├── credit_risk_lite_model.pkl
-│   └── churn_model_v1.pkl
+├── models/                         # Model eğitim scriptleri (sadece gösterim amaçlı)
+│   ├── README.md                   # Model eğitim scriptleri açıklaması
+│   ├── train_credit_risk_lite.py  # Credit Risk Lite Model eğitim scripti
+│   ├── train_credit_risk_pro.py   # Credit Risk Pro Model eğitim scripti
+│   ├── train_churn_model.py       # Churn Prediction Model eğitim scripti
+│   └── train_nba_kmeans.py        # NBA K-Means Clustering Model eğitim scripti
 ├── compare_churn_models_100cv.py   # Model karşılaştırma scripti
 └── model_comparison_log.txt        # Model karşılaştırma logu
 ```
@@ -282,6 +284,7 @@ BankaciPlus/
 - **Büyük Dosyalar:** CSV ve .pkl dosyaları `.gitignore`'da bulunmaktadır
 - **Model Dosyaları:** Eğitilmiş modelleri harici olarak saklayın veya çalışma zamanında yükleyin
 - **Veri Setleri:** Büyük veri setleri için indirme linkleri veya talimatlar ekleyin
+- **`models/` Klasörü:** Bu klasördeki Python scriptleri **sadece gösterim amaçlıdır** ve mülakatlarda model eğitim sürecini göstermek için hazırlanmıştır. Bu scriptler `app.py`'de kullanılmaz ve uygulama çalıştırıldığında gerekli değildir.
 
 ### 📝 Lisans
 
@@ -553,10 +556,12 @@ BankaciPlus/
 │   ├── lending_club_cleaned.csv
 │   └── bank_customer_churn_data/
 │       └── Customer-Churn-Records.csv
-├── models/                         # Model files (not in git)
-│   ├── credit_risk_model_20fold.pkl
-│   ├── credit_risk_lite_model.pkl
-│   └── churn_model_v1.pkl
+├── models/                         # Model training scripts (for demonstration only)
+│   ├── README.md                   # Model training scripts documentation
+│   ├── train_credit_risk_lite.py  # Credit Risk Lite Model training script
+│   ├── train_credit_risk_pro.py   # Credit Risk Pro Model training script
+│   ├── train_churn_model.py       # Churn Prediction Model training script
+│   └── train_nba_kmeans.py        # NBA K-Means Clustering Model training script
 ├── compare_churn_models_100cv.py   # Model comparison script
 └── model_comparison_log.txt        # Model comparison log
 ```
@@ -567,6 +572,7 @@ BankaciPlus/
 - **Large Files:** CSV and .pkl files are in `.gitignore`
 - **Model Files:** Store trained models externally or load at runtime
 - **Datasets:** Add download links or instructions for large datasets
+- **`models/` Folder:** The Python scripts in this folder are **for demonstration purposes only** and were prepared to showcase the model training process during interviews. These scripts are not used in `app.py` and are not required when running the application.
 
 ### 📝 License
 
