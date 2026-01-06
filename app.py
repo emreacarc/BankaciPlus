@@ -287,6 +287,34 @@ def set_design():
             border: 1px solid var(--glass-border) !important;
         }
 
+        /* Expander klavye kısayolu metinlerini ve tooltip'leri gizle */
+        [data-testid="stExpander"] [title],
+        [data-testid="stExpander"] .streamlit-expanderHeader [title],
+        .streamlit-expanderHeader [title],
+        [data-testid="stExpander"] p[title],
+        [data-testid="stExpander"] span[title],
+        [data-testid="stExpander"] div[title] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+        
+        /* Expander header içindeki ikinci ve sonraki child elementleri gizle (sadece başlık kalsın) */
+        .streamlit-expanderHeader > *:not(:first-child) {
+            display: none !important;
+        }
+        
+        /* Expander içindeki tüm tooltip ve hint elementlerini gizle */
+        [data-testid="stExpander"] [title*="Press"],
+        [data-testid="stExpander"] [title*="keyboard"],
+        [data-testid="stExpander"] [title*="Enter"],
+        [data-testid="stExpander"] [title*="↓"],
+        [data-testid="stExpander"] [title*="▲"],
+        [data-testid="stExpander"] [title*="▼"] {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
         /* Tablo ve DataFrame Şeffaf Arka Plan ve Beyaz Metin Fix */
         [data-testid="stDataFrame"], 
         [data-testid="stDataFrame"] *, 
