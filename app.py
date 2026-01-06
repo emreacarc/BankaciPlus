@@ -700,6 +700,18 @@ def load_all_resources():
     except FileNotFoundError as e:
         st.error(f"❌ Dosya bulunamadı: {e}\n\n📁 Arama yapılan dizin: `{PROJECT_ROOT}`\n\n💡 Lütfen gerekli model ve veri dosyalarını proje kök dizinine ekleyin.")
         return None, None, None, None, None, None, None, None, None
+    except AttributeError as e:
+        if '_RemainderColsList' in str(e) or 'ColumnTransformer' in str(e):
+            st.error(f"❌ Scikit-learn versiyon uyumsuzluğu hatası!\n\n"
+                    f"**Hata:** {e}\n\n"
+                    f"**Çözüm:** Model dosyaları farklı bir scikit-learn versiyonu ile kaydedilmiş.\n\n"
+                    f"**Yapılacaklar:**\n"
+                    f"1. `requirements.txt` dosyasında `scikit-learn==1.3.2` olduğundan emin olun\n"
+                    f"2. Streamlit Cloud'da paketleri yeniden yükleyin\n"
+                    f"3. Gerekirse model dosyalarını mevcut scikit-learn versiyonu ile yeniden kaydedin")
+        else:
+            st.error(f"❌ Dosya yükleme hatası: {e}\n\n📁 Arama yapılan dizin: `{PROJECT_ROOT}`")
+        return None, None, None, None, None, None, None, None, None
     except Exception as e:
         st.error(f"❌ Dosya yükleme hatası: {e}\n\n📁 Arama yapılan dizin: `{PROJECT_ROOT}`")
         return None, None, None, None, None, None, None, None, None
