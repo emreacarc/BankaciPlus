@@ -4,6 +4,7 @@ import joblib
 import numpy as np
 import re
 import datetime
+import random
 import plotly.express as px
 import plotly.graph_objects as go
 from sklearn.cluster import KMeans
@@ -1168,10 +1169,156 @@ def advanced_strategy(row):
             return "🤝 İLİŞKİ YÖNETİMİ"
 
 
+def calculate_sales_probability(row, segment_name=None, product_type=None):
+    """
+    Müşteri değişkenlerine göre dinamik satış ihtimali hesaplama.
+    
+    Parametreler:
+    - row: Müşteri verisi (pandas Series veya dict)
+    - segment_name: Müşteri segmenti
+    - product_type: Önerilen ürün tipi (opsiyonel)
+    
+    Hesaplama Faktörleri:
+    1. Segment bazlı base probability
+    2. Finansal güç (Balance, Salary)
+    3. Aktivite durumu (IsActiveMember)
+    4. Ürün portföyü (NumOfProducts, mevcut ürünler)
+    5. Yaş faktörü
+    6. Kredi skoru
+    7. Tenure (müşteri sadakati)
+    """
+    def safe_get(row, key, default=0):
+        try:
+            if isinstance(row, dict):
+                return row.get(key, default)
+            else:  # pandas Series
+                return row[key] if key in row.index else default
+        except:
+            return default
+    
+    # Segment bazlı base probability
+    segment_base_prob = {
+        "💎 Elit / Servet Yönetimi": 80,
+        "🚀 Dinamik / Aktif Müşteri": 75,
+        "💰 Güvenli / Birikimci": 70,
+        "📊 Standart Bankacılık": 65,
+        "🌱 Temel Mevduat / Giriş": 60,
+        "⚠️ Riskli / Pasif Müşteri": 55
+    }
+    
+    # Base probability belirleme
+    base_prob = 50  # Varsayılan
+    if segment_name:
+        for seg, prob in segment_base_prob.items():
+            if seg in segment_name:
+                base_prob = prob
+                break
+    
+    # Müşteri değişkenlerini al
+    balance = safe_get(row, 'Balance', 0)
+    salary = safe_get(row, 'EstimatedSalary', 0)
+    num_products = safe_get(row, 'NumOfProducts', 1)
+    is_active = safe_get(row, 'IsActiveMember', 0)
+    age = safe_get(row, 'Age', 40)
+    credit_score = safe_get(row, 'CreditScore', 650)
+    tenure = safe_get(row, 'Tenure', 5)
+    has_cr_card = safe_get(row, 'HasCrCard', 0)
+    has_bes = safe_get(row, 'Has_BES', 0)
+    has_yatirim = safe_get(row, 'Has_Yatirim', 0)
+    has_kredi = safe_get(row, 'Has_Kredi', 0)
+    
+    # Finansal güç faktörü (Balance)
+    balance_factor = 0
+    if balance > 100000:
+        balance_factor = 12
+    elif balance > 50000:
+        balance_factor = 8
+    elif balance > 20000:
+        balance_factor = 5
+    elif balance > 10000:
+        balance_factor = 2
+    
+    # Gelir faktörü (Salary)
+    salary_factor = 0
+    if salary > 100000:
+        salary_factor = 10
+    elif salary > 60000:
+        salary_factor = 7
+    elif salary > 40000:
+        salary_factor = 4
+    elif salary > 25000:
+        salary_factor = 2
+    
+    # Aktivite faktörü
+    activity_factor = 8 if is_active == 1 else -5
+    
+    # Ürün portföyü faktörü (daha fazla ürün = daha sadık müşteri)
+    product_factor = min(num_products * 3, 10)  # Max 10 puan
+    
+    # Yaş faktörü (25-55 yaş arası en aktif)
+    age_factor = 0
+    if 25 <= age <= 55:
+        age_factor = 5
+    elif 20 <= age < 25 or 55 < age <= 65:
+        age_factor = 2
+    elif age > 65:
+        age_factor = -3
+    
+    # Kredi skoru faktörü
+    credit_factor = 0
+    if credit_score >= 750:
+        credit_factor = 6
+    elif credit_score >= 700:
+        credit_factor = 4
+    elif credit_score >= 650:
+        credit_factor = 2
+    elif credit_score < 600:
+        credit_factor = -5
+    
+    # Tenure faktörü (müşteri sadakati)
+    tenure_factor = min(tenure * 1.5, 8)  # Max 8 puan
+    
+    # Ürün eksikliği faktörü (hangi ürün eksikse ona göre artış)
+    product_gap_factor = 0
+    if product_type:
+        if "Kredi Kartı" in product_type and has_cr_card == 0:
+            product_gap_factor = 8
+        elif "BES" in product_type and has_bes == 0:
+            product_gap_factor = 7
+        elif "Yatırım" in product_type and has_yatirim == 0:
+            product_gap_factor = 6
+        elif "Kredi" in product_type and has_kredi == 0:
+            product_gap_factor = 5
+    
+    # Toplam probability hesapla
+    total_prob = (base_prob + 
+                  balance_factor + 
+                  salary_factor + 
+                  activity_factor + 
+                  product_factor + 
+                  age_factor + 
+                  credit_factor + 
+                  tenure_factor + 
+                  product_gap_factor)
+    
+    # Ham skoru 25-80 arasına normalize et
+    normalized_prob = max(25, min(80, total_prob))
+    
+    # Çeşitlilik için random -5 ile +5 arası değişiklik ekle
+    random_variation = random.randint(-5, 5)
+    final_prob = normalized_prob + random_variation
+    
+    # Final sonucu 25-95 arasına sınırla (random ekledikten sonra sınırları aşabilir)
+    final_prob = max(25, min(95, final_prob))
+    
+    return round(final_prob)
+
+
 def get_next_best_action(row, segment_name=None):
     """
     Segment bazlı Next Best Action önerileri.
     6 segment için özelleştirilmiş ürün önerileri.
+    Satış ihtimali müşteri değişkenlerine göre dinamik hesaplanır.
     """
     # Pandas Series için güvenli erişim fonksiyonu
     def safe_get(row, key, default=0):
@@ -1189,110 +1336,156 @@ def get_next_best_action(row, segment_name=None):
         
         if "💎 Elit / Servet Yönetimi" in segment_name:
             if safe_get(row, 'Has_Yatirim', 0) == 0:
-                return {"Product": "Özel Yatırım Danışmanlığı", "Prob": 92,
+                product = "Özel Yatırım Danışmanlığı"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Elit segment - Yüksek değerli müşteri için özel hizmet.",
                        "Script": "Kişisel yatırım danışmanınızla tanışmak ister misiniz?"}
             elif safe_get(row, 'Has_BES', 0) == 0:
-                return {"Product": "Premium BES Paketi", "Prob": 85,
+                product = "Premium BES Paketi"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Elit müşteriler için özel emeklilik planı.",
                        "Script": "Geleceğinizi premium seviyede planlayalım."}
             else:
-                return {"Product": "VIP Müşteri Hizmetleri", "Prob": 80,
+                product = "VIP Müşteri Hizmetleri"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Elit segment için özel avantajlar.",
                        "Script": "Size özel avantajlardan haberdar mısınız?"}
         
         elif "🚀 Dinamik / Aktif Müşteri" in segment_name:
             # Aktif müşteri + Yüksek ürün sayısı + Yüksek maaş
             if safe_get(row, 'HasCrCard', 0) == 0:
-                return {"Product": "Premium Kredi Kartı (Mil Puan)", "Prob": 88,
+                product = "Premium Kredi Kartı (Mil Puan)"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Aktif müşteri - Yüksek harcama potansiyeli, mil puan kazanma fırsatı.",
                        "Script": "Her harcamanızda mil puan kazanın, seyahatlerinizi ücretsiz yapın!"}
             elif safe_get(row, 'NumOfProducts', 1) < 3:
-                return {"Product": "BES + Yatırım Paketi", "Prob": 85,
+                product = "BES + Yatırım Paketi"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Aktif müşteri - Ürün portföyünü genişletme fırsatı.",
                        "Script": "Geleceğinizi planlayın, birikimlerinizi değerlendirin."}
             else:
-                return {"Product": "Lifestyle Ödül Programı", "Prob": 80,
+                product = "Lifestyle Ödül Programı"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Aktif müşteri - Yaşam tarzına uygun ödüller.",
                        "Script": "Konser, spor, teknoloji ürünlerinde özel indirimler."}
         
         elif "💰 Güvenli / Birikimci" in segment_name:
             if safe_get(row, 'Balance', 0) > 50000 and safe_get(row, 'Has_Yatirim', 0) == 0:
-                return {"Product": "Likit Fon / Altın Yatırımı", "Prob": 90,
+                product = "Likit Fon / Altın Yatırımı"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Yüksek bakiye + Birikimci profil - Enflasyona karşı koruma.",
                        "Script": "Paranızı enflasyona karşı koruyalım, değer kazandıralım."}
             elif safe_get(row, 'EstimatedSalary', 0) > 60000:
-                return {"Product": "Vadeli Mevduat (Yüksek Faiz)", "Prob": 85,
+                product = "Vadeli Mevduat (Yüksek Faiz)"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Birikimci segment - Güvenli ve yüksek getiri.",
                        "Script": "Birikimlerinize yüksek faiz kazandıralım."}
             else:
-                return {"Product": "Otomatik Birikim Planı", "Prob": 78,
+                product = "Otomatik Birikim Planı"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Birikimci segment - Düzenli tasarruf alışkanlığı.",
                        "Script": "Her ay otomatik birikim yaparak hedeflerinize ulaşın."}
         
         elif "⚠️ Riskli / Pasif Müşteri" in segment_name:
             # Pasif müşteri + Düşük maaş + Düşük bakiye
             if safe_get(row, 'IsActiveMember', 1) == 0:
-                return {"Product": "Müşteri Aktivasyon Programı", "Prob": 85,
+                product = "Müşteri Aktivasyon Programı"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Pasif müşteri - Aktivasyon ve ilişki güçlendirme.",
                        "Script": "Size özel avantajlarla bankacılık deneyiminizi canlandıralım."}
             elif safe_get(row, 'Balance', 0) < 10000:
-                return {"Product": "Dijital Bankacılık Eğitimi + Teşvik", "Prob": 75,
+                product = "Dijital Bankacılık Eğitimi + Teşvik"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Pasif müşteri - Dijital kanalları kullanma teşviki.",
                        "Script": "Dijital bankacılık avantajlarını keşfedin, özel teşviklerden faydalanın."}
             else:
-                return {"Product": "Finansal Danışmanlık", "Prob": 65,
+                product = "Finansal Danışmanlık"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Pasif müşteri - Finansal planlama ve ilişki yönetimi.",
                        "Script": "Ücretsiz finansal danışmanlık hizmetimizden faydalanın."}
         
         elif "🌱 Temel Mevduat / Giriş" in segment_name:
             if safe_get(row, 'HasCrCard', 0) == 0:
-                return {"Product": "Temel Kredi Kartı", "Prob": 75,
+                product = "Temel Kredi Kartı"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Giriş seviyesi - İlk kredi kartı fırsatı.",
                        "Script": "İlk kredi kartınızı alın, güvenli alışveriş yapın."}
             elif safe_get(row, 'EstimatedSalary', 0) > 30000:
-                return {"Product": "Dijital Bankacılık Eğitimi", "Prob": 70,
+                product = "Dijital Bankacılık Eğitimi"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Giriş seviyesi - Dijital bankacılık öğrenimi.",
                        "Script": "Dijital bankacılık avantajlarını keşfedin."}
             else:
-                return {"Product": "Genç Müşteri Paketi", "Prob": 65,
+                product = "Genç Müşteri Paketi"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Giriş segmenti - Özel genç müşteri avantajları.",
                        "Script": "Size özel avantajlı paketlerimizi inceleyin."}
         
         elif "📊 Standart Bankacılık" in segment_name:
             if safe_get(row, 'EstimatedSalary', 0) > 50000 and safe_get(row, 'Age', 30) > 25 and safe_get(row, 'Age', 30) < 55 and safe_get(row, 'Has_BES', 0) == 0:
-                return {"Product": "Bireysel Emeklilik (BES)", "Prob": 78,
+                product = "Bireysel Emeklilik (BES)"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Standart segment - Gelecek planlaması.",
                        "Script": "Devlet katkısından faydalanarak emekliliğinizi planlayın."}
             elif safe_get(row, 'Spending_Score', 0) > 50 and safe_get(row, 'HasCrCard', 0) == 0:
-                return {"Product": "Standart Kredi Kartı", "Prob": 72,
+                product = "Standart Kredi Kartı"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Orta harcama potansiyeli - Kredi kartı ihtiyacı.",
                        "Script": "Günlük alışverişlerinizde kolaylık sağlayın."}
             else:
-                return {"Product": "Otomatik Ödeme Sistemi", "Prob": 68,
+                product = "Otomatik Ödeme Sistemi"
+                prob = calculate_sales_probability(row, segment_name, product)
+                return {"Product": product, "Prob": prob,
                        "Reason": "Standart segment - Kolaylık odaklı.",
                        "Script": "Faturalarınızı otomatik ödeyin, zaman kazanın."}
     
     # Segment bilgisi yoksa genel kurallar (geriye dönük uyumluluk)
     if safe_get(row, 'Balance', 0) > 40000 and safe_get(row, 'Has_Yatirim', 0) == 0: 
-        return {"Product": "Likit Fon / Altın", "Prob": 88,
-                                                                   "Reason": "Vadesiz hesapta yüksek atıl bakiye.",
-                                                                   "Script": "Paranızı enflasyona karşı koruyalım."}
+        product = "Likit Fon / Altın"
+        prob = calculate_sales_probability(row, segment_name, product)
+        return {"Product": product, "Prob": prob,
+               "Reason": "Vadesiz hesapta yüksek atıl bakiye.",
+               "Script": "Paranızı enflasyona karşı koruyalım."}
     if safe_get(row, 'EstimatedSalary', 0) > 50000 and safe_get(row, 'Age', 30) > 25 and safe_get(row, 'Age', 30) < 55 and safe_get(row, 'Has_BES', 0) == 0: 
-        return {"Product": "Bireysel Emeklilik (BES)", "Prob": 78, 
+        product = "Bireysel Emeklilik (BES)"
+        prob = calculate_sales_probability(row, segment_name, product)
+        return {"Product": product, "Prob": prob, 
                "Reason": "Gelir yüksek, gelecek güvencesi yok.",
-        "Script": "Devlet katkısından faydalanın."}
+               "Script": "Devlet katkısından faydalanın."}
     if safe_get(row, 'Spending_Score', 50) > 60 and safe_get(row, 'HasCrCard', 0) == 0: 
-        return {"Product": "Platinum Kredi Kartı", "Prob": 72,
-                                                                     "Reason": "Harcama potansiyeli yüksek.",
-                                                                     "Script": "Mil puan kazanmak ister misiniz?"}
+        product = "Platinum Kredi Kartı"
+        prob = calculate_sales_probability(row, segment_name, product)
+        return {"Product": product, "Prob": prob,
+               "Reason": "Harcama potansiyeli yüksek.",
+               "Script": "Mil puan kazanmak ister misiniz?"}
     if safe_get(row, 'CreditScore', 650) < 650 and safe_get(row, 'Balance', 0) < 5000 and safe_get(row, 'Has_Kredi', 0) == 0: 
-        return {"Product": "İhtiyaç Kredisi", "Prob": 65, 
+        product = "İhtiyaç Kredisi"
+        prob = calculate_sales_probability(row, segment_name, product)
+        return {"Product": product, "Prob": prob, 
                "Reason": "Nakit sıkışıklığı sinyali.",
-        "Script": "3 ay ertelemeli kredi ister misiniz?"}
-    return {"Product": "Otomatik Ödeme", "Prob": 45, 
+               "Script": "3 ay ertelemeli kredi ister misiniz?"}
+    product = "Otomatik Ödeme"
+    prob = calculate_sales_probability(row, segment_name, product)
+    return {"Product": product, "Prob": prob, 
            "Reason": "Mevcut ürünler yeterli.",
-            "Script": "Faturalarınızı otomatik ödeyelim."}
+           "Script": "Faturalarınızı otomatik ödeyelim."}
 
 
 # --- 6. VERİ GETİRME ---
